@@ -1,0 +1,42 @@
+﻿<Window x:Class="DataGridWithAdornerInCSharp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DataGridWithAdornerInCSharp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+   
+    <Grid>
+        <DataGrid  
+         AlternatingRowBackground ="LightYellow" 
+         AlternationCount = "2" AutoGenerateColumns = "False" CanUserAddRows="False" 
+         ItemsSource="{Binding Rows}">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Name" Width="200" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid DataContext="{Binding Columns}">
+                                <ListView ItemsSource="{Binding InnerRows}" 
+                                      SelectedItem="{Binding SelectedInnerRow, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"
+                                      PreviewMouseLeftButtonUp="ListView_PreviewMouseLeftButtonUp">
+
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Name"     DisplayMemberBinding="{Binding LastName}" Width="100"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
+    
+    
+    
+    
+
