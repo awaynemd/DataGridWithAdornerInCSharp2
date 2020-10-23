@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace DataGridWithAdornerInCSharp
 {
@@ -12,12 +11,7 @@ namespace DataGridWithAdornerInCSharp
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DataGridAnnotationControl), new FrameworkPropertyMetadata(typeof(DataGridAnnotationControl)));
         }
         
-        public DataGridAnnotationControl()
-        {
-            BorderBrush = Brushes.Black;
-            Background = Brushes.AliceBlue;
-            BorderThickness = new Thickness(20, 20, 20, 20);
-        }
+        public DataGridAnnotationControl() { }
         
         public string LastName
         {
