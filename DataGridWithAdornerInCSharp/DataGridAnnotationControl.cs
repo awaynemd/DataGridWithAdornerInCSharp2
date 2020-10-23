@@ -21,24 +21,12 @@ namespace DataGridWithAdornerInCSharp
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private const string LastNamePartName = "PART_LastName";
-        private TextBox _tbLastName;
-
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            _tbLastName = GetTemplateChild(LastNamePartName) as TextBox;
-        }
-
         public DataGridAnnotationControl()
         {
             BorderBrush = Brushes.Black;
             Background = Brushes.AliceBlue;
             BorderThickness = new Thickness(20, 20, 20, 20);
         }
-
-
 
         public string LastName
         {
