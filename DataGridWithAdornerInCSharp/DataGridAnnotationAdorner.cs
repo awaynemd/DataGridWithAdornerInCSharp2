@@ -19,9 +19,7 @@ namespace DataGridWithAdornerInCSharp
         {
             AdornedDataGrid = adornedDataGrid;
 
-            Control = new DataGridAnnotationControl {
-                Visit = visit
-            };
+            Control = new DataGridAnnotationControl();
 
             var cmdBinding = new Binding("SaveAppointmentCommand")
             {
@@ -45,6 +43,8 @@ namespace DataGridWithAdornerInCSharp
 
             AddLogicalChild(Control);
             AddVisualChild(Control);
+
+            Control.Visit = visit;
         }
 
         #region Measure/Arrange      
