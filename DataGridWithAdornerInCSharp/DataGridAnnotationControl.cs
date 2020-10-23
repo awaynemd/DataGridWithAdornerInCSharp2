@@ -1,24 +1,15 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
 namespace DataGridWithAdornerInCSharp
 {
-    public class DataGridAnnotationControl : Control, INotifyPropertyChanged
+    public class DataGridAnnotationControl : Control
     {
         static DataGridAnnotationControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DataGridAnnotationControl), new FrameworkPropertyMetadata(typeof(DataGridAnnotationControl)));
-        }
-        
-        public event PropertyChangedEventHandler PropertyChanged;
-        
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         
         public DataGridAnnotationControl()
