@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 namespace DataGridWithAdornerInCSharp
 {
-    public class DataGridAnnotationControl : Control
+    public class DataGridAnnotationControl : UserControl
     {
         static DataGridAnnotationControl()
         {
