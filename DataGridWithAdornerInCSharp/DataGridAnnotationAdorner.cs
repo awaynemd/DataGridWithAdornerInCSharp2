@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,39 +11,44 @@ namespace DataGridWithAdornerInCSharp
 {
     public class DataGridAnnotationAdorner : Adorner
     {
-        private ArrayList _logicalChildren;
-        private Point _location;
-        public DataGridAnnotationControl Control { get; set; }
+        public DataGridAnnotationControl Control { get; }
+        public Grid AdornedDataGrid { get; }
 
         public DataGridAnnotationAdorner(Grid adornedDataGrid, InnerRow visit, object dc)
             : base(adornedDataGrid)
         {
-            Control = new DataGridAnnotationControl();
+            AdornedDataGrid = adornedDataGrid;
 
-            Binding cmd2 = new Binding("SaveAppointmentCommand");
-            cmd2.Source = dc;
-            BindingOperations.SetBinding(Control, DataGridAnnotationControl.SaveAppointmentCommandProperty, cmd2);
+            Control = new DataGridAnnotationControl {
+                Visit = visit
+            };
 
-            Binding myBinding1 = new Binding("LastName");
-            myBinding1.Source = dc;
-            myBinding1.Mode = BindingMode.TwoWay;
-            myBinding1.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-            BindingOperations.SetBinding(Control, DataGridAnnotationControl.LastNameProperty, myBinding1);
+            var cmdBinding = new Binding("SaveAppointmentCommand")
+            {
+                Source = dc
+            };
+            BindingOperations.SetBinding(Control, DataGridAnnotationControl.SaveAppointmentCommandProperty, cmdBinding);
 
-            Binding myBinding5 = new Binding("Visit");
-            myBinding5.Source = dc;
-            myBinding5.Mode = BindingMode.TwoWay;
-            myBinding5.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-            BindingOperations.SetBinding(Control, DataGridAnnotationControl.VisitProperty, myBinding5);
+            var lastNameBinding = new Binding("LastName") {
+                Source = dc,
+                Mode = BindingMode.TwoWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            };
+            BindingOperations.SetBinding(Control, DataGridAnnotationControl.LastNameProperty, lastNameBinding);
+
+            var visitBinding = new Binding("Visit") {
+                Source = dc,
+                Mode = BindingMode.TwoWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            };
+            BindingOperations.SetBinding(Control, DataGridAnnotationControl.VisitProperty, visitBinding);
 
             AddLogicalChild(Control);
             AddVisualChild(Control);
-
-            Control.Visit = visit;
         }
 
         #region Measure/Arrange      
-        protected override System.Windows.Size MeasureOverride(Size constraint)
+        protected override Size MeasureOverride(Size constraint)
         {
             Control.Measure(constraint);
             return Control.DesiredSize;
@@ -50,69 +56,44 @@ namespace DataGridWithAdornerInCSharp
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            double xloc = (((Grid)AdornedElement).ActualWidth - Control.DesiredSize.Width) / 2;
-            double yloc = (((Grid)AdornedElement).ActualHeight - Control.DesiredSize.Height) / 2;
+            var x = (AdornedDataGrid.ActualWidth - Control.DesiredSize.Width) / 2;
+            var y = (AdornedDataGrid.ActualHeight - Control.DesiredSize.Height) / 2;
+            var p = new Point(x, y);
+            var r = new Rect(p, finalSize);
 
-            _location = new Point(xloc, yloc);
-
-            Rect rect = new Rect(_location, finalSize);
-
-            Control.Arrange(rect);
+            Control.Arrange(r);
 
             return finalSize;
         }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            SolidColorBrush screenBrush_ = new SolidColorBrush();
-            screenBrush_.Color = Colors.Crimson;
-            screenBrush_.Opacity = 0.3;
-            screenBrush_.Freeze();
+            var screenBrush = new SolidColorBrush {
+                Color = Colors.Crimson,
+                Opacity = 0.3
+            };
+            screenBrush.Freeze();
+            var rectangle = new Rect(new Point(0, 0), AdornedElement.DesiredSize);
 
-            drawingContext.DrawRectangle(screenBrush_, null, WindowRect());
+            drawingContext.DrawRectangle(screenBrush, null, rectangle);
 
             base.OnRender(drawingContext);
         }
-
-
-        private Rect WindowRect()
-        {
-            return new Rect(new Point(0, 0), AdornedElement.DesiredSize);
-        }
-
-        #endregion 
+        #endregion
 
         #region [Visual Children]
-        protected override int VisualChildrenCount
-        {
-            get { return 1; }
-        }
+        protected override int VisualChildrenCount => 1;
         protected override Visual GetVisualChild(int index)
         {
             if (index != 0)
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
 
             return Control;
         }
-
         #endregion
 
         #region Logical Children
-        protected override IEnumerator LogicalChildren
-        {
-            get
-            {
-                if (_logicalChildren == null)
-                {
-                    _logicalChildren = new ArrayList();
-                    _logicalChildren.Add(Control);
-                }
-
-                return _logicalChildren.GetEnumerator();
-            }
-        }
-
+        protected override IEnumerator LogicalChildren => Enumerable.Repeat(Control, 1).GetEnumerator();
         #endregion
     }
 }
-
