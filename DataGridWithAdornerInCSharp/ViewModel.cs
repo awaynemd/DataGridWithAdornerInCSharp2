@@ -40,6 +40,7 @@ namespace DataGridWithAdornerInCSharp
         public RelayCommand SaveAppointmentCommand =>
             new RelayCommand(_ =>
             {
+                Visit.LastName = LastName;
                 var me = string.Format("My Name is {0}....I Am Saved!", LastName);
                 var r = MessageBox.Show(me);
             }, _ => true);
