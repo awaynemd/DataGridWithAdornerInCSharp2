@@ -3,7 +3,6 @@ using System.Collections;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 
@@ -14,37 +13,15 @@ namespace DataGridWithAdornerInCSharp
         public DataGridAnnotationControl Control { get; }
         public Grid AdornedDataGrid { get; }
 
-        public DataGridAnnotationAdorner(Grid adornedDataGrid, InnerRow visit, object dc)
+        public DataGridAnnotationAdorner(Grid adornedDataGrid)
             : base(adornedDataGrid)
         {
             AdornedDataGrid = adornedDataGrid;
-
-            Control = new DataGridAnnotationControl();
-
-            var cmdBinding = new Binding("SaveAppointmentCommand")
-            {
-                Source = dc
-            };
-            BindingOperations.SetBinding(Control, DataGridAnnotationControl.SaveAppointmentCommandProperty, cmdBinding);
-
-            var lastNameBinding = new Binding("LastName") {
-                Source = dc,
-                Mode = BindingMode.TwoWay,
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
-            };
-            BindingOperations.SetBinding(Control, DataGridAnnotationControl.LastNameProperty, lastNameBinding);
-
-            var visitBinding = new Binding("Visit") {
-                Source = dc,
-                Mode = BindingMode.TwoWay,
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
-            };
-            BindingOperations.SetBinding(Control, DataGridAnnotationControl.VisitProperty, visitBinding);
+            var control = new DataGridAnnotationControl();
+            Control = control;
 
             AddLogicalChild(Control);
             AddVisualChild(Control);
-
-            Control.Visit = visit;
         }
 
         #region Measure/Arrange      
